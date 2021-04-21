@@ -19,7 +19,8 @@ const useStyles = makeStyles({
 });
 
 const AmbulanceCard = (props: any) => {
-    const { time , status} = props;
+    const { time, status, handleClick   } = props;
+    const backGround = (status === "Active") ? "bg-success" : "bg-danger" ;
 
     const classes = useStyles();
     return (
@@ -31,10 +32,8 @@ const AmbulanceCard = (props: any) => {
                         image={AmbulanceImage}
                         title="Contemplative Reptile"
                     />
-                    <CardContent>
-                        {status}
-                        <Button >TrafficLight</Button>
-                    </CardContent>
+                    <CardContent>     
+                        <Button className={backGround} onClick={handleClick}>TrafficLight {status === "Active" && <span>{"::"}{time}</span>}</Button>                    </CardContent>
                 </CardActionArea>
             </Card>
         </div>

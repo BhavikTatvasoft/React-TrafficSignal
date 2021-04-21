@@ -1,10 +1,12 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import AmbulanceCard from './atoms/ambulance-card-component';
+import { act } from '@testing-library/react';
+import { constants } from 'node:os';
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -20,6 +22,7 @@ const useStyles = makeStyles(() =>
             alignItems: 'center',
             justifyContent: 'center',
             paddingTop: "20px",
+
         },
         left: {
             paddingTop: "20px",
@@ -30,12 +33,12 @@ const useStyles = makeStyles(() =>
             alignItems: 'center',
             justifyContent: 'center',
 
-
         },
         right: {
             paddingTop: "20px",
             paddingLeft: '25%',
             marginRight: '0px',
+
         }
 
 
@@ -49,29 +52,161 @@ const Dashboard = () => {
     const [activeLeft, setActiveLeft] = React.useState('');
     const [activeRight, setActiveRight] = React.useState('');
     const [prevActive, setPrevActive] = React.useState('');
-    const [prevTimer, setPrevTimer] = React.useState('');
+    const [prevTimer, setPrevTimer] = React.useState(0);
     const [activeTimer, setActiveTimer] = React.useState(0);
+    const [isRemember, setIsRemember] = React.useState(false);
 
+    const handlestop = () => {
+        setActiveTop("");
+        setActiveRight("");
+        setActiveBottom("");
+        setActiveLeft("");
+    }
     const handleSignal = () => {
-        if (value === 'Clock') {
-            setActiveTop('Active');         
+        handlestop();
+        if (!isRemember) {
+            if (value === 'Clock') {
+                if (prevActive === "") {
+                    setActiveTop("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Top");
+                }
+                if (prevActive === "Top") {
+                    setActiveRight("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Right");
+                }
+                if (prevActive === "Right") {
+                    setActiveBottom("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Bottom");
+                }
+                if (prevActive === "Bottom") {
+                    setActiveLeft("Active");
+                    setActiveTimer(5);
+                    setPrevActive("");
+                }
+            }
+            else if (value === "AntiClock") {
+                if (prevActive === "") {
+                    setActiveTop("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Top");
+                }
+                if (prevActive === "Top") {
+                    setActiveLeft("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Left");
+                }
+                if (prevActive === "Left") {
+                    setActiveBottom("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Bottom");
+                }
+                if (prevActive === "Bottom") {
+                    setActiveRight("Active");
+                    setActiveTimer(5);
+                    setPrevActive("");
+                }
+            }
+            else if (value === "TopBottom") {
+                if (prevActive === "") {
+                    setActiveTop("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Top");
+                }
+                if (prevActive === "Top") {
+                    setActiveBottom("Active");
+                    setActiveTimer(5);
+                    setPrevActive("");
+                }
+            }
+            else if (value === "RightLeft") {
+                if (prevActive === "") {
+                    setActiveLeft("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Left");
+                }
+                if (prevActive === "Left") {
+                    setActiveRight("Active");
+                    setActiveTimer(5);
+                    setPrevActive("");
+                }
+            }
+        }
+        else if (isRemember) {
+            if (prevTimer !== 0) {
+                if (prevActive === "Top") {
+                    setActiveTop("Active");
+                    setActiveTimer(prevTimer);
+                    setPrevActive("Top");
+                }
+                else if (prevActive === "Left") {
+                    setActiveLeft("Active");
+                    setActiveTimer(prevTimer);
+                    setPrevActive("Left");
+                }
+                else if (prevActive === "Left") {
+                    setActiveLeft("Active");
+                    setActiveTimer(prevTimer);
+                    setPrevActive("Left");
+                }
+                else if (prevActive === "Bottom") {
+                    setActiveBottom("Active");
+                    setActiveTimer(prevTimer);
+                    setPrevActive("Bottom");
+                }
+                setIsRemember(false);
+            }
+        }
+    }
+
+    const handleChange = (event: any) => {
+        debugger;
+        setValue(event.target.value);
+        handleSignal();
+        setPrevActive("");
+    };
+
+    const handleBreak = (type: any) => {
+        setPrevTimer(activeTimer);
+        handlestop();
+        setIsRemember(true);
+        if (type === "Top") {
+            setActiveTop("Active");
+            setActiveTimer(5);
+        }
+        else if (type === "Bottom") {
+            setActiveBottom("Active");
+            setActiveTimer(5);
+        }
+        else if (type === "Left") {
+            setActiveLeft("Active");
+            setActiveTimer(5);
+        }
+        else if (type === "Right") {
+            setActiveRight("Active");
+            setActiveTimer(5);
         }
     }
 
     useEffect(() => {
-        handleSignal();
-    },);
+        debugger;
+        if (activeTimer <= 0) {
+            handleSignal();
+        }
+        else {
+            const intervalRef = window.setInterval(() => setActiveTimer((prev) => prev - 1), 1000);
 
-    const handleChange = (event: any) => {
-        setValue(event.target.value);
-    };
-
+            return () => clearInterval(intervalRef);
+        }
+    }, [activeTimer]);
 
     return (
         <div className={classes.body}>
             <div className={classes.title}>
-                Traffic Control
-             </div>
+                Traffic Control {activeTimer}
+            </div>
             <div>
                 <FormControl component="fieldset">
                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
@@ -82,19 +217,19 @@ const Dashboard = () => {
                     </RadioGroup>
                 </FormControl>
             </div>
-            <div className={classes.top}>
-                <AmbulanceCard time={prevTimer} status={activeTop} />
+            <div className={classes.top} onClick={() => handleBreak("Top")}>
+                <AmbulanceCard time={activeTimer} status={activeTop} />
             </div>
             <div className="row">
                 <div className="col-6">
-                    <div className={classes.left}><AmbulanceCard time={prevTimer} status={activeLeft} /></div>
+                    <div className={classes.left} onClick={() => handleBreak("Left")}><AmbulanceCard time={activeTimer} status={activeLeft} /></div>
                 </div>
                 <div className="col-6 ">
-                    <div className={classes.right}><AmbulanceCard time={prevTimer} status={activeRight} /></div>
+                    <div className={classes.right} onClick={() => handleBreak("Right")}><AmbulanceCard time={activeTimer} status={activeRight} /></div>
                 </div>
             </div>
-            <div className={classes.bottom}>
-                <AmbulanceCard time={prevTimer} status={activeBottom} />
+            <div className={classes.bottom} onClick={() => handleBreak("Bottom")}>
+                <AmbulanceCard time={activeTimer} status={activeBottom} />
             </div>
         </div>
     )
