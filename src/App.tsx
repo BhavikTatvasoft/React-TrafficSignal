@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import Dashboard from './Pages/Dashboard/Dashboard.component';
 import { makeStyles } from '@material-ui/core/styles';
@@ -31,6 +31,10 @@ function App() {
     (lang === "guj") && setGujrati(true);
     i18n.changeLanguage(lang);
   }
+
+  useEffect(() => {
+    i18n.changeLanguage('en');
+}, []);
   return (
     <div className="App">
       <nav className={classes.root}>
