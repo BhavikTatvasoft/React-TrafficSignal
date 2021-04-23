@@ -70,7 +70,6 @@ const Dashboard = () => {
   const [isRemember, setIsRemember] = useState(false);
 
   const handleSignal = () => {
-    debugger;
     setActive("");
     if (!isRemember) {
       if (direction === Directions.Clock) {
@@ -167,7 +166,6 @@ const Dashboard = () => {
   };
 
   const handleChange = (event: any) => {
-    debugger;
     setDirection(event.target.value);
     handleSignal();
     setPrevActive("");
