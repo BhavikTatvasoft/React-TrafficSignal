@@ -5,11 +5,17 @@ import AmbulanceImage from "Images/ambulance.png";
 import i18n from "i18next";
 const useStyles = makeStyles({
   root: {
-    maxWidth: 150,
-    maxHeight: 100,
+    width: 150,
+    height: 100,
   },
   media: {
     height: 75,
+  },
+  button:{
+    marginTop: '10%',
+    display: "flex",  
+    alignItems: "center",
+    justifyContent: "center", 
   },
 });
 
@@ -25,13 +31,12 @@ const AmbulanceCard: React.FC<IAmbulanceProps> = ({time, status})=> {
 
   return (
     <div className={classes.root}>
-      <div>
         <CardMedia
           className={classes.media}
           image={AmbulanceImage}
           title="Contemplative Reptile"
         />
-        <div>
+        <div className={classes.button}>
           <Button className={backGround}>
             {i18n.t("TrafficLight.1")}{" "}
             {status && (
@@ -41,8 +46,7 @@ const AmbulanceCard: React.FC<IAmbulanceProps> = ({time, status})=> {
               </span>
             )}
           </Button>
-        </div>
-      </div>
+        </div>  
     </div>
   );
 };

@@ -19,7 +19,7 @@ const useStyles = makeStyles(() =>
       alignItems: "center",
       justifyContent: "center",
     },
-    form:{
+    form: {
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -52,6 +52,7 @@ enum Directions {
   AntiClock = "AntiClock",
   TopBottom = "TopBottom",
   RightLeft = "RightLeft",
+  None = "",
 }
 
 enum Signals {
@@ -70,7 +71,6 @@ const Dashboard = () => {
   const [isRemember, setIsRemember] = useState(false);
 
   const handleSignal = () => {
-    setActive("");
     if (!isRemember) {
       if (direction === Directions.Clock) {
         if (!prevActive) {
@@ -127,6 +127,10 @@ const Dashboard = () => {
           setPrevActive(Signals.Bottom);
         } else if (prevActive === Signals.Bottom) {
           setActive(Signals.Top);
+          setActiveTimer(5);  
+          setPrevActive(Signals.Top);
+        } else {
+          setActive(Signals.Top);
           setActiveTimer(5);
           setPrevActive(Signals.Top);
         }
@@ -140,6 +144,10 @@ const Dashboard = () => {
           setActiveTimer(5);
           setPrevActive(Signals.Right);
         } else if (prevActive === Signals.Right) {
+          setActive(Signals.Left);
+          setActiveTimer(5);
+          setPrevActive(Signals.Left);
+        } else {
           setActive(Signals.Left);
           setActiveTimer(5);
           setPrevActive(Signals.Left);
@@ -167,8 +175,7 @@ const Dashboard = () => {
 
   const handleChange = (event: any) => {
     setDirection(event.target.value);
-    handleSignal();
-    setPrevActive("");
+    setPrevActive(active);
   };
 
   const handleBreak = (type: any) => {
@@ -205,7 +212,8 @@ const Dashboard = () => {
   return (
     <div className={classes.body}>
       <div className={classes.title}>
-        {i18n.t("TrafficControl.1")} <h2 className="pl-5">{i18n.t(`Second.${activeTimer}`)}</h2>
+        {i18n.t("TrafficControl.1")}{" "}
+        <h2 className="pl-5">{i18n.t(`Second.${activeTimer}`)}</h2>
       </div>
       <div className={classes.form}>
         <FormControl component="fieldset">
