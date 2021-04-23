@@ -1,0 +1,22 @@
+{
+    "TrafficControl":{
+        "1":"Traffic Control"
+    },
+    "SignalChioces":{
+        "1":"Clock Wise",
+        "2":"Anti Clock Wise",
+        "3":"Top Bottom",
+        "4":"Left Right"
+    },
+    "TrafficLight":{
+        "1":"Traffic Light"
+    },
+    "Second":{
+        "0": "0",
+        "1":"1",
+        "2":"2",
+        "3":"3",
+        "4":"4",
+        "5":"5"
+    }
+}

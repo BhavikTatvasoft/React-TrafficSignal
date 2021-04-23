@@ -1,17 +1,16 @@
 import { createStyles, makeStyles } from '@material-ui/core';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import AmbulanceCard from './atoms/ambulance-card-component';
-import { act } from '@testing-library/react';
-import { constants } from 'node:os';
-
+// import { useTranslation } from 'react-i18next';
+import i18n from 'i18next';
 const useStyles = makeStyles(() =>
     createStyles({
         body: {
-
+            padding: '3%'
         },
         title: {
             fontSize: "xx-large",
@@ -22,7 +21,6 @@ const useStyles = makeStyles(() =>
             alignItems: 'center',
             justifyContent: 'center',
             paddingTop: "20px",
-
         },
         left: {
             paddingTop: "20px",
@@ -66,25 +64,30 @@ const Dashboard = () => {
         handlestop();
         if (!isRemember) {
             if (value === 'Clock') {
-                if (prevActive === "") {
+                if (prevActive === ""){
                     setActiveTop("Active");
                     setActiveTimer(5);
                     setPrevActive("Top");
                 }
-                if (prevActive === "Top") {
+                else if (prevActive === "Top") {
                     setActiveRight("Active");
                     setActiveTimer(5);
                     setPrevActive("Right");
                 }
-                if (prevActive === "Right") {
+                else if (prevActive === "Right") {
                     setActiveBottom("Active");
                     setActiveTimer(5);
                     setPrevActive("Bottom");
                 }
-                if (prevActive === "Bottom") {
+                else if (prevActive === "Bottom") {
                     setActiveLeft("Active");
                     setActiveTimer(5);
-                    setPrevActive("");
+                    setPrevActive("Left");
+                }
+                else if (prevActive === "Left") {
+                    setActiveTop("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Top");
                 }
             }
             else if (value === "AntiClock") {
@@ -93,32 +96,42 @@ const Dashboard = () => {
                     setActiveTimer(5);
                     setPrevActive("Top");
                 }
-                if (prevActive === "Top") {
+                else if (prevActive === "Top") {
                     setActiveLeft("Active");
                     setActiveTimer(5);
                     setPrevActive("Left");
                 }
-                if (prevActive === "Left") {
+                else if (prevActive === "Left") {
                     setActiveBottom("Active");
                     setActiveTimer(5);
                     setPrevActive("Bottom");
                 }
-                if (prevActive === "Bottom") {
+                else if (prevActive === "Bottom") {
                     setActiveRight("Active");
                     setActiveTimer(5);
-                    setPrevActive("");
+                    setPrevActive("Right");
                 }
-            }
-            else if (value === "TopBottom") {
-                if (prevActive === "") {
+                else if (prevActive === "Right") {
                     setActiveTop("Active");
                     setActiveTimer(5);
                     setPrevActive("Top");
                 }
-                if (prevActive === "Top") {
+            }
+            else if (value === "TopBottom") {
+                if (prevActive === "" || prevActive === "Bottom" ) {
+                    setActiveTop("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Top");
+                }
+                else if (prevActive === "Top") {
                     setActiveBottom("Active");
                     setActiveTimer(5);
-                    setPrevActive("");
+                    setPrevActive("Bottom");
+                }
+                else if (prevActive === "Bottom") {
+                    setActiveTop("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Top");
                 }
             }
             else if (value === "RightLeft") {
@@ -127,42 +140,42 @@ const Dashboard = () => {
                     setActiveTimer(5);
                     setPrevActive("Left");
                 }
-                if (prevActive === "Left") {
+                else if (prevActive === "Left") {
                     setActiveRight("Active");
                     setActiveTimer(5);
-                    setPrevActive("");
+                    setPrevActive("Right");
+                }
+                else if ( prevActive === "Right") {
+                    setActiveLeft("Active");
+                    setActiveTimer(5);
+                    setPrevActive("Left");
                 }
             }
         }
         else if (isRemember) {
+            setIsRemember(false);
             if (prevTimer !== 0) {
                 if (prevActive === "Top") {
                     setActiveTop("Active");
                     setActiveTimer(prevTimer);
-                    setPrevActive("Top");
+                }
+                else if (prevActive === "Right") {
+                    setActiveRight("Active");
+                    setActiveTimer(prevTimer);
                 }
                 else if (prevActive === "Left") {
                     setActiveLeft("Active");
                     setActiveTimer(prevTimer);
-                    setPrevActive("Left");
-                }
-                else if (prevActive === "Left") {
-                    setActiveLeft("Active");
-                    setActiveTimer(prevTimer);
-                    setPrevActive("Left");
                 }
                 else if (prevActive === "Bottom") {
                     setActiveBottom("Active");
                     setActiveTimer(prevTimer);
-                    setPrevActive("Bottom");
                 }
-                setIsRemember(false);
             }
         }
     }
 
     const handleChange = (event: any) => {
-        debugger;
         setValue(event.target.value);
         handleSignal();
         setPrevActive("");
@@ -191,7 +204,7 @@ const Dashboard = () => {
     }
 
     useEffect(() => {
-        debugger;
+        console.log('pre active', prevActive);
         if (activeTimer <= 0) {
             handleSignal();
         }
@@ -205,15 +218,15 @@ const Dashboard = () => {
     return (
         <div className={classes.body}>
             <div className={classes.title}>
-                Traffic Control {activeTimer}
+                {i18n.t('TrafficControl.1')} {i18n.t(`Second.${activeTimer}`)}
             </div>
             <div>
                 <FormControl component="fieldset">
                     <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
-                        <FormControlLabel value="Clock" control={<Radio />} label="Clock Wise" />
-                        <FormControlLabel value="AntiClock" control={<Radio />} label="Anti Clock Wise" />
-                        <FormControlLabel value="TopBottom" control={<Radio />} label="Top Bottom" />
-                        <FormControlLabel value="RightLeft" control={<Radio />} label="Right Left" />
+                        <FormControlLabel value="Clock" control={<Radio />} label={i18n.t('SignalChioces.1')} />
+                        <FormControlLabel value="AntiClock" control={<Radio />} label={i18n.t('SignalChioces.2')} />
+                        <FormControlLabel value="TopBottom" control={<Radio />} label={i18n.t('SignalChioces.3')} />
+                        <FormControlLabel value="RightLeft" control={<Radio />} label={i18n.t('SignalChioces.4')} />
                     </RadioGroup>
                 </FormControl>
             </div>
