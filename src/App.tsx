@@ -1,19 +1,23 @@
-import React, { useEffect, useState } from 'react';
-import './App.css';
-import Dashboard from './Pages/Dashboard/Dashboard.component';
-import { makeStyles } from '@material-ui/core/styles';
-import { useTranslation } from 'react-i18next';
-import Button from '@material-ui/core/Button';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+import Dashboard from "./Pages/Dashboard/Dashboard.component";
+import { makeStyles } from "@material-ui/core/styles";
+import { useTranslation } from "react-i18next";
+import Button from "@material-ui/core/Button";
+import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
+import NotFound from "./Pages/NotFound/NotFound";
+
 const useStyles = makeStyles({
   root: {
-    width: '90%',
-    padding: '1rem 0',
-    margin: 'auto',
-    backgroundColor: 'grey',
+    width: "90%",
+    padding: "0.5rem 0",
+    paddingLeft: "35%",
+    margin: "auto",
+    backgroundColor: "grey",
   },
   button: {
-    margin: '10px',
-  }
+    margin: "10px",
+  },
 });
 function App() {
   const classes = useStyles();
@@ -26,24 +30,51 @@ function App() {
     setEnglish(false);
     setHindi(false);
     setGujrati(false);
-    (lang === "en") && setEnglish(true);
-    (lang === "hi") && setHindi(true);
-    (lang === "guj") && setGujrati(true);
+    lang === "en" && setEnglish(true);
+    lang === "hi" && setHindi(true);
+    lang === "guj" && setGujrati(true);
     i18n.changeLanguage(lang);
-  }
-
+  };
   useEffect(() => {
-    i18n.changeLanguage('en');
-}, []);
+    i18n.changeLanguage(process.env.DEFAULT_LANGUAGE);
+  }, []);
   return (
-    <div className="App">
+    <Router>
       <nav className={classes.root}>
-        <Button variant="contained" color={(isEnglish) ? "primary" : "secondary"} onClick={() => handleClick('en')} className={classes.button}>English</Button>
-        <Button variant="contained" color={(isHindi) ? "primary" : "secondary"} onClick={() => handleClick('hi')} className={classes.button}>Hindi</Button>
-        <Button variant="contained" color={(isGujrati) ? "primary" : "secondary"} onClick={() => handleClick('guj')} className={classes.button}>Gujrati</Button>
+        <Button
+          variant="contained"
+          color={isEnglish ? "primary" : "secondary"}
+          onClick={() => handleClick("en")}
+          className={classes.button}
+        >
+          English
+        </Button>
+        <Button
+          variant="contained"
+          color={isHindi ? "primary" : "secondary"}
+          onClick={() => handleClick("hi")}
+          className={classes.button}
+        >
+          Hindi
+        </Button>
+        <Button
+          variant="contained"
+          color={isGujrati ? "primary" : "secondary"}
+          onClick={() => handleClick("guj")}
+          className={classes.button}
+        >
+          Gujrati
+        </Button>
       </nav>
-      <Dashboard />
-    </div >
+      <Route
+        exact
+        path="/"
+        render={() => {
+          return <Redirect to="/dashboard" />;
+        }}
+      />
+      <Route path="/dashboard" component={Dashboard} />
+    </Router>
   );
 }
 
