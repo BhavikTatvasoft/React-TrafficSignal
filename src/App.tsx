@@ -5,7 +5,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useTranslation } from "react-i18next";
 import Button from "@material-ui/core/Button";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
-import NotFound from "./Pages/NotFound/NotFound";
 
 const useStyles = makeStyles({
   root: {
