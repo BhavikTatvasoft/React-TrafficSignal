@@ -127,7 +127,7 @@ const Dashboard = () => {
           setPrevActive(Signals.Bottom);
         } else if (prevActive === Signals.Bottom) {
           setActive(Signals.Top);
-          setActiveTimer(5);  
+          setActiveTimer(5);
           setPrevActive(Signals.Top);
         } else {
           setActive(Signals.Top);

@@ -11,42 +11,41 @@ const useStyles = makeStyles({
   media: {
     height: 75,
   },
-  button:{
-    marginTop: '10%',
-    display: "flex",  
+  button: {
+    marginTop: "10%",
+    display: "flex",
     alignItems: "center",
-    justifyContent: "center", 
+    justifyContent: "center",
   },
 });
 
 interface IAmbulanceProps {
-    time: number 
-    status: boolean;
-  }
-  
+  time: number;
+  status: boolean;
+}
 
-const AmbulanceCard: React.FC<IAmbulanceProps> = ({time, status})=> {
+const AmbulanceCard: React.FC<IAmbulanceProps> = ({ time, status }) => {
   const classes = useStyles();
   const backGround = status ? "bg-success" : "bg-danger";
 
   return (
     <div className={classes.root}>
-        <CardMedia
-          className={classes.media}
-          image={AmbulanceImage}
-          title="Contemplative Reptile"
-        />
-        <div className={classes.button}>
-          <Button className={backGround}>
-            {i18n.t("TrafficLight.1")}{" "}
-            {status && (
-              <span>
-                {"::"}
-                {i18n.t(`Second.${time}`)}
-              </span>
-            )}
-          </Button>
-        </div>  
+      <CardMedia
+        className={classes.media}
+        image={AmbulanceImage}
+        title="Contemplative Reptile"
+      />
+      <div className={classes.button}>
+        <Button className={backGround}>
+          {i18n.t("TrafficLight.1")}{" "}
+          {status && (
+            <span>
+              {"::"}
+              {i18n.t(`Second.${time}`)}
+            </span>
+          )}
+        </Button>
+      </div>
     </div>
   );
 };
