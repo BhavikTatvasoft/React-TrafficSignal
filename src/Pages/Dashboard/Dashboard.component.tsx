@@ -52,7 +52,6 @@ enum Directions {
   AntiClock = "AntiClock",
   TopBottom = "TopBottom",
   RightLeft = "RightLeft",
-  None = "",
 }
 
 enum Signals {
@@ -65,136 +64,87 @@ const Dashboard = () => {
   const classes = useStyles();
   const [direction, setDirection] = useState(Directions.Clock);
   const [active, setActive] = useState("");
-  const [prevActive, setPrevActive] = useState("");
   const [prevTimer, setPrevTimer] = useState(0);
   const [activeTimer, setActiveTimer] = useState(0);
-  const [isRemember, setIsRemember] = useState(false);
+  const [isRemember, setIsRemember] = useState("");
+  const defaultTime = 5;
 
   const handleSignal = () => {
     if (!isRemember) {
       if (direction === Directions.Clock) {
-        if (!prevActive) {
+        if (!active) {
           setActive(Signals.Top);
-          setActiveTimer(5);
-          setPrevActive(Signals.Top);
-        } else if (prevActive === Signals.Top) {
+        } else if (active === Signals.Top) {
           setActive(Signals.Right);
-          setActiveTimer(5);
-          setPrevActive(Signals.Right);
-        } else if (prevActive === Signals.Right) {
+        } else if (active === Signals.Right) {
           setActive(Signals.Bottom);
-          setActiveTimer(5);
-          setPrevActive(Signals.Bottom);
-        } else if (prevActive === Signals.Bottom) {
+        } else if (active === Signals.Bottom) {
           setActive(Signals.Left);
-          setActiveTimer(5);
-          setPrevActive(Signals.Left);
-        } else if (prevActive === Signals.Left) {
+        } else if (active === Signals.Left) {
           setActive(Signals.Top);
-          setActiveTimer(5);
-          setPrevActive(Signals.Top);
         }
       } else if (direction === Directions.AntiClock) {
-        if (!prevActive) {
+        if (!active) {
           setActive(Signals.Top);
-          setActiveTimer(5);
-          setPrevActive(Signals.Top);
-        } else if (prevActive === Signals.Top) {
+        } else if (active === Signals.Top) {
           setActive(Signals.Left);
-          setActiveTimer(5);
-          setPrevActive(Signals.Left);
-        } else if (prevActive === Signals.Left) {
+        } else if (active === Signals.Left) {
           setActive(Signals.Bottom);
-          setActiveTimer(5);
-          setPrevActive(Signals.Bottom);
-        } else if (prevActive === Signals.Bottom) {
+        } else if (active === Signals.Bottom) {
           setActive(Signals.Right);
-          setActiveTimer(5);
-          setPrevActive(Signals.Right);
-        } else if (prevActive === Signals.Right) {
+        } else if (active === Signals.Right) {
           setActive(Signals.Top);
-          setActiveTimer(5);
-          setPrevActive(Signals.Top);
         }
       } else if (direction === Directions.TopBottom) {
-        if (!prevActive) {
+        if (!active) {
           setActive(Signals.Top);
-          setActiveTimer(5);
-          setPrevActive(Signals.Top);
-        } else if (prevActive === Signals.Top) {
+        } else if (active === Signals.Top) {
           setActive(Signals.Bottom);
-          setActiveTimer(5);
-          setPrevActive(Signals.Bottom);
-        } else if (prevActive === Signals.Bottom) {
+        } else if (active === Signals.Bottom) {
           setActive(Signals.Top);
-          setActiveTimer(5);
-          setPrevActive(Signals.Top);
         } else {
           setActive(Signals.Top);
-          setActiveTimer(5);
-          setPrevActive(Signals.Top);
         }
       } else if (direction === Directions.RightLeft) {
-        if (!prevActive) {
+        if (!active) {
           setActive(Signals.Left);
-          setActiveTimer(5);
-          setPrevActive(Signals.Left);
-        } else if (prevActive === Signals.Left) {
+        } else if (active === Signals.Left) {
           setActive(Signals.Right);
-          setActiveTimer(5);
-          setPrevActive(Signals.Right);
-        } else if (prevActive === Signals.Right) {
+        } else if (active === Signals.Right) {
           setActive(Signals.Left);
-          setActiveTimer(5);
-          setPrevActive(Signals.Left);
         } else {
           setActive(Signals.Left);
-          setActiveTimer(5);
-          setPrevActive(Signals.Left);
         }
       }
+      setActiveTimer(defaultTime);
     } else if (isRemember) {
-      setIsRemember(false);
       if (prevTimer !== 0) {
-        if (prevActive === Signals.Top) {
-          setActive(Signals.Top);
-          setActiveTimer(prevTimer);
-        } else if (prevActive === Signals.Right) {
-          setActive(Signals.Right);
-          setActiveTimer(prevTimer);
-        } else if (prevActive === Signals.Left) {
-          setActive(Signals.Left);
-          setActiveTimer(prevTimer);
-        } else if (prevActive === Signals.Bottom) {
-          setActive(Signals.Bottom);
-          setActiveTimer(prevTimer);
-        }
+        setActive(isRemember);
+        setActiveTimer(prevTimer);
+      } else {
+        handleSignal();
       }
+      setIsRemember("");
     }
   };
 
   const handleChange = (event: any) => {
     setDirection(event.target.value);
-    setPrevActive(active);
   };
 
   const handleBreak = (type: any) => {
     setPrevTimer(activeTimer);
-    setActive("");
-    setIsRemember(true);
+    setIsRemember(active);
     if (type === Signals.Top) {
       setActive(Signals.Top);
-      setActiveTimer(5);
     } else if (type === Signals.Bottom) {
       setActive(Signals.Bottom);
-      setActiveTimer(5);
     } else if (type === Signals.Left) {
       setActive(Signals.Left);
-      setActiveTimer(5);
     } else if (type === Signals.Right) {
       setActive(Signals.Right);
-      setActiveTimer(5);
     }
+    setActiveTimer(defaultTime);
   };
 
   useEffect(() => {
