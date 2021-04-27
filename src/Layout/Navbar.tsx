@@ -26,7 +26,7 @@ const NavBar = () => {
   const classes = useStyles();
   const { i18n } = useTranslation();
   const [currentLanguage, setCurrentLanguage] = useState(
-    process.env.DEFAULT_LANGUAGE !== undefined
+    process.env.DEFAULT_LANGUAGE
       ? process.env.DEFAULT_LANGUAGE
       : Languages.English
   );
